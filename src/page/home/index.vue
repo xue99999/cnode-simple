@@ -1,0 +1,297 @@
+<template>
+	<div>
+		<nav class="nav">
+			<ul>		
+				<li class="nav_item" :class="{ active: !this.$route.query.tab }">
+					<router-link to="/">全部</router-link>
+				</li>
+				<li class="nav_item" :class="{ active: this.$route.query.tab == 'good'}">
+					<router-link to="/?tab=good">精华</router-link>
+				</li>
+				<li class="nav_item" :class="{ active: this.$route.query.tab == 'share'}">
+					<router-link to="/?tab=share">分享</router-link>
+				</li>
+				<li class="nav_item" :class="{ active: this.$route.query.tab == 'ask'}">
+					<router-link to="/?tab=ask">问答</router-link>
+				</li>
+				<li class="nav_item" :class="{ active: this.$route.query.tab == 'job'}">
+					<router-link to="/?tab=job">招聘</router-link>
+				</li>
+			</ul>
+		</nav>
+		<v-content>
+			<ul class="list">
+				<li class="list_item" v-for="item in lists">
+					<router-link to="/">
+					<div class="list_top">
+						<div class="avatar" :style="{'background-image': 'url('+ item.author.avatar_url +')'}">
+						</div>
+
+						<div class="extra">
+							<h2 class="name">{{item.author.loginname}}</h2>
+							<div class="desc">
+								<!-- <time class="time">1天前</time><span class="tag">#分享#</span> -->
+								<time class="time">{{item.create_at | formatDate}}</time><span class="tag">#{{tabs[item.tab]}}#</span>
+							</div>
+						</div>
+					</div>
+					<div class="icon_wrap">
+						<div v-if="item.good" class="icon">
+							<i class="iconfont icon-topic-good green"></i>
+						</div>
+						<div v-if="item.top" class="icon">
+							<i class="iconfont icon-topic-top red"></i>
+						</div>
+					</div>
+					<div class="tit">
+						{{item.title}}
+					</div>
+					<div class="list_bot">
+						<div class="item">
+							<i class="iconfont icon-click"></i><span class="text">{{item.visit_count}}</span>
+						</div>
+						<div class="item">
+							<i class="iconfont icon-comment"></i><span class="text">{{item.reply_count}}</span>
+						</div>
+						<div class="item">
+							<time class="text">{{item.last_reply_at | formatDate}}</time>
+						</div>
+					</div>
+					</router-link>
+				</li>
+			</ul>
+
+			<v-loading :loading="loading" :complete="complete"></v-loading>
+		</v-content>
+		<v-footer></v-footer>
+	</div>
+</template>
+
+<script>
+
+	export default {
+		data() {
+			return {
+				baseUrl: 'https://cnodejs.org/api/v1/topics',
+				lists: [],
+				tabs: {
+					'share': '分享',
+					'ask': '问答',
+					'good': '精华',
+					'job': '招聘'
+				},
+				searchKey: {
+					page: 1,
+					limit: 20,
+					tab: 'all',
+					mdrender: true
+				},
+				loading: false,
+				complete: false
+			}
+		},
+		created() {
+			if (this.$route.query && this.$route.query.tab) {
+				this.searchKey.tab = this.$route.query.tab
+			} else {
+				this.searchKey.tab = 'all'
+			}
+			this.lists = []
+			this.getList()
+		},
+		watch: {
+			$route() {
+				if (this.$route.query && this.$route.query.tab) {
+					this.searchKey.tab = this.$route.query.tab
+				} else {
+					this.searchKey.tab = 'all'
+				}
+				this.lists = []
+				this.searchKey.page = 1
+				this.getList()
+			}
+		},
+		methods: {
+			getList() {
+				if (this.complete || this.loading) return
+				this.loading = true
+				let params = this.transfromData(this.searchKey)
+
+				this.$http.get(this.baseUrl + params)
+					.then(d => {
+						if (d.data.data.length > 0) {
+							d.data.data.forEach(item => {
+								this.lists.push(item)
+							})
+						} else {
+							this.complete = true
+						}
+						this.searchKey.page++
+						this.loading = false
+					})
+			},
+			transfromData(obj) {
+				let params = '?'
+				for (let i in obj) {
+					params += i + '=' + obj[i] + '&'
+				}
+				return params.slice(0, -1)
+			}
+		}
+	}
+</script>
+
+<style lang="less">
+	.nav {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		z-index: 10;
+		border-bottom:  1px solid #ddd;
+		ul {
+			display: flex;
+			width: 100%;
+			.nav_item {
+				position: relative;
+				flex: 1;
+				height: 49px;
+				line-height: 49px;
+				text-align: center;
+			}
+			a {
+				display: block;
+				font-size: 14px;
+				color: #a2a2a2;
+			}
+			.active {
+				a {
+					color: #222;
+				}
+				&:after {
+					content: '';
+					position: absolute;
+					bottom: 1px;
+					left: 0;
+					right: 0;
+					height: 3px;
+					background: #80bd01;
+				}
+			}
+		}
+	}
+	.list {
+		background-color: #eee;
+		overflow: hidden;
+		.list_item {
+			position: relative;
+			background-color: #fff;
+			padding: 15px;
+			padding-bottom: 0;
+			margin-bottom: 15px;
+			box-shadow: 0 0 5px #ccc;
+		}
+		.list_top {
+			display: flex;
+			.avatar {
+				width: 30px;
+				height: 30px;
+				margin-right: 5px;
+				border-radius: 50%;
+				background-color: #f7f7f7;
+				background-repeat: no-repeat;
+				background-position: center center;
+				border: 1px solid #ddd;
+				background-size: cover;
+			}
+			.extra {
+				flex: 1;
+				text-align: left;
+				.name {
+					font-size: 16px;
+					line-height: 24px;
+					color: #080808;
+				}
+				.desc {
+					font-size: 12px;
+					line-height: 16px;
+					.time {
+						color: #aaa;
+						margin-right: 5px;
+					}
+					.tag {
+						color: #80bd01;
+					}
+				}
+			}
+		}
+		.icon_wrap {
+			position: absolute;
+			display: flex;
+			right: 0;
+			top: 0;
+			.icon {
+				padding: 20px 5px;
+				flex: 1;
+				overflow: hidden;
+				.red {
+					color: red;
+				}
+				.green {
+					color: green;
+				}
+				.iconfont {
+					display: block;
+					font-size: 34px;
+					transform: rotate(35deg);
+				}
+			}
+		}
+		.tit {
+			padding: 10px 0;
+			text-align: left;
+			font-size: 16px;
+			line-height: 22px;
+			font-weight: bold;
+			color: #222;
+		}
+		.list_bot {
+			display: flex;
+			padding: 10px 0;
+			border-top: 1px solid #e1e1e1;
+			.item {
+				flex: 1;
+				padding: 0 10px;
+				border-right: 1px solid #eee;
+				line-height: 20px;
+				&:last-child {
+					border-right: none;
+				}
+				.iconfont {
+					font-size: 16px;
+					margin-right: 5px;
+					color: #aaa;
+				}
+				.text {
+					font-size: 12px;
+				}
+			}
+		}
+	}
+
+	.more_btn {
+		display: block;
+		width: 30%;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		margin: 20px auto;
+		border-radius: 5px;
+		background-color: #252e39;
+		color: #fff;
+		border: none;
+		&:active {
+			opacity: 0.7;
+		}
+	}
+</style>
