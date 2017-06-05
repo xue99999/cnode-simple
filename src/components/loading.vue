@@ -9,6 +9,7 @@
 </template>
 
 <script>
+	import isSeeing from '../util/is-seeing.js'
 
 	export default {
 		props: {
@@ -28,8 +29,9 @@
 		},
 		mounted() {
 			this.timer = setInterval(() => {
-				if (!this.state) {
+				if ( isSeeing(this.$el) && !this.state) {
 					this.state = true
+					this.$emit('seeing')
 				}
 			}, 300)
 		},

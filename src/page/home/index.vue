@@ -21,8 +21,8 @@
 		</nav>
 		<v-content>
 			<ul class="list">
-				<li class="list_item" v-for="item in lists">
-					<router-link to="/">
+				<li class="list_item" v-for="item in lists" :data-id="item.id">
+					<router-link :to="'/topic/' + item.id">
 					<div class="list_top">
 						<div class="avatar" :style="{'background-image': 'url('+ item.author.avatar_url +')'}">
 						</div>
@@ -61,7 +61,7 @@
 				</li>
 			</ul>
 
-			<v-loading :loading="loading" :complete="complete"></v-loading>
+			<v-loading :loading="loading" :complete="complete" @seeing="seeing"></v-loading>
 		</v-content>
 		<v-footer></v-footer>
 	</div>
@@ -112,6 +112,10 @@
 			}
 		},
 		methods: {
+			seeing() {
+				if (this.searchKey.page == 1) return
+				this.getList()
+			},
 			getList() {
 				if (this.complete || this.loading) return
 				this.loading = true
