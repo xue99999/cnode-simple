@@ -9,18 +9,53 @@
             <div class="user">
                 <div class="header_bg"></div>
                 <div class="avatar_wrap">
-                    <!-- <span class="avatar" :style="{'background-image': 'url(' + item.author.avatar_url + ')'}"></span> -->
-                    <span class="avatar" :style="{'background-image': 'url(' + 'https://avatars3.githubusercontent.com/u/1297278?v=3&s=120' + ')'}"></span>
+                    <span class="avatar" :style="{'background-image': 'url(' + user.avatar_url + ')'}"></span>
                 </div>
-                <h2 class="nickname">xuejun询</h2>
-                <div class="list">
-                    <span>积分: 30</span>
-                    <span>注册于: 1年前</span>
+                <h2 class="nickname">{{user.loginname}}</h2>
+                <div class="user_info">
+                    <span>积分: {{user.score}}</span>
+                    <span>注册于: {{user.create_at | formatDate}}</span>
                 </div>
             </div>
+            <ul class="user_ul">
+                <li :class="{on: tabIndex == 0}" @click="tabIndex = 0">回复</li>
+                <li :class="{on: tabIndex == 1}" @click="tabIndex = 1">主题</li>
+            </ul>
+            <list v-if="tabIndex == 0" :list="user.recent_replies"></list>
+            <list v-else :list="user.recent_topics"></list>    
         </v-content>
     </div>
 </template>
+
+<script>
+    import list from './list'
+    export default {
+        data() {
+            return {
+                tabIndex: 0,
+                user: {}
+            }
+        },
+        created() {
+            this.getData()
+        },
+        methods: {
+            getData() {
+                let username = this.$route.params.username
+                this.$http.get('https://cnodejs.org/api/v1/user/' + username)
+                    .then(d => {
+                        this.user = d.data.data
+                    })
+            }
+        },
+        watch: {
+            $route() {
+                this.getData()
+            }
+        },
+        components: {list}
+    }
+</script>
 
 <style lang="less">
     .user {
@@ -48,8 +83,38 @@
         }
         .nickname {
             text-align: center;
-            font-size: 18px;
+            font-size: 22px;
             margin: 10px 0;
+        }
+        .user_info {
+            display: flex;
+            padding: 10px 15px;
+            span {
+                flex: 1;
+                font-size: 14px;
+                line-height: 16px;
+                &:nth-child(2) {
+                    text-align: right;
+                }
+            }
+        }
+    }
+    .user_ul {
+        display: flex;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        margin-top: 10px;
+        li {
+            flex: 1;
+            line-height: 38px;
+            text-align: center;
+            border-right: 1px solid #ddd;
+            &.on {
+                color: #80bd01;
+            }
+            &:nth-child(2) {
+                border: none;
+            }
         }
     }
     
