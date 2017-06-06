@@ -1,5 +1,6 @@
 import './common/css/reset.css'
 import './iconfont/iconfont.css'
+import 'github-markdown-css'
 
 import Vue from 'vue'
 import axios from 'axios'

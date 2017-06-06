@@ -7,6 +7,7 @@
 		bottom: 50px;
 		z-index: 100;
 		overflow: auto;
+		text-align: left;
 		-webkit-overflow-scrolling: touch;
 	}
 </style>

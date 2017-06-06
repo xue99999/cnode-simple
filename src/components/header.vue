@@ -40,6 +40,7 @@
 			padding: 0;
 			margin: 0;
 			font-size: 16px;
+			font-weight: bold;
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			overflow: hidden;
