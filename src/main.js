@@ -19,7 +19,12 @@ Object.keys(filters).forEach(k => Vue.filter(k, filters[k]))
 
 Vue.config.productionTip = false
 
-Vue.prototype.$http = axios
+let instance = axios.create({
+  baseURL: 'https://cnodejs.org/api/v1/',
+  timeout: 1000
+})
+
+Vue.prototype.$http = instance
 
 
 /* eslint-disable no-new */

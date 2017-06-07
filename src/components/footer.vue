@@ -24,7 +24,7 @@
 						title: '首页'
 					},
 					{
-						path: '/topic/create',
+						path: '/topic/publish',
 						icon: 'icon-edit',
 						title: '发表'
 					},

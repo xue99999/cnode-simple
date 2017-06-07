@@ -88,7 +88,6 @@
 		data() {
 			return {
 				exist: true,
-				baseUrl: 'https://cnodejs.org/api/v1/topic/',
 				id: '',
 				topic: {},
 				author: {},
@@ -101,7 +100,7 @@
 		methods: {
 			getData() {
 				let vid = this.$route.params.vid
-				this.$http.get(this.baseUrl + vid)
+				this.$http.get('topic/' + vid)
 					.then(d => {
 						if (d.data.data && d.data.data.id) {
 							this.topic = d.data.data
@@ -201,7 +200,7 @@
 		border-bottom: 1px solid #ddd;
 		.tit {
 			font-size: 22px;
-			padding: 5px 15px;
+			padding: 10px 15px;
 			font-weight: 700;
 			line-height: 1.2;
 			color: #333;

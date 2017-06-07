@@ -72,7 +72,6 @@
 	export default {
 		data() {
 			return {
-				baseUrl: 'https://cnodejs.org/api/v1/topics',
 				lists: [],
 				tabs: {
 					'share': '分享',
@@ -121,7 +120,7 @@
 				this.loading = true
 				let params = this.transfromData(this.searchKey)
 
-				this.$http.get(this.baseUrl + params)
+				this.$http.get('topics' + params)
 					.then(d => {
 						if (d.data.data.length > 0) {
 							d.data.data.forEach(item => {

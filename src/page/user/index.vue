@@ -1,6 +1,6 @@
 <template>
     <div class="user_wrap">
-        <v-header title="个人中心">
+        <v-header title="个人资料">
             <div slot="left" class="item" @click="$router.go(-1)">
                 <i class="iconfont icon-back"></i>
             </div>
@@ -42,7 +42,7 @@
         methods: {
             getData() {
                 let username = this.$route.params.username
-                this.$http.get('https://cnodejs.org/api/v1/user/' + username)
+                this.$http.get('user/' + username)
                     .then(d => {
                         this.user = d.data.data
                     })
@@ -93,6 +93,9 @@
                 flex: 1;
                 font-size: 14px;
                 line-height: 16px;
+                &:nth-child(1) {
+                    text-align: left;
+                }
                 &:nth-child(2) {
                     text-align: right;
                 }
