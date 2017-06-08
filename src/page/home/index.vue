@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="home">
 		<nav class="nav">
 			<ul>		
 				<li class="nav_item" :class="{ active: !this.$route.query.tab }">
@@ -145,156 +145,164 @@
 </script>
 
 <style lang="less">
-	.nav {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		z-index: 10;
-		border-bottom:  1px solid #ddd;
-		ul {
-			display: flex;
-			width: 100%;
-			.nav_item {
-				position: relative;
-				flex: 1;
-				height: 49px;
-				line-height: 49px;
-				text-align: center;
-			}
-			a {
-				display: block;
-				font-size: 14px;
-				color: #a2a2a2;
-			}
-			.active {
-				a {
-					color: #222;
-				}
-				&:after {
-					content: '';
-					position: absolute;
-					bottom: 1px;
-					left: 0;
-					right: 0;
-					height: 3px;
-					background: #80bd01;
-				}
-			}
-		}
-	}
-	.list {
-		background-color: #eee;
-		overflow: hidden;
-		.list_item {
-			position: relative;
-			background-color: #fff;
-			padding: 15px;
-			padding-bottom: 0;
-			margin-bottom: 15px;
-			box-shadow: 0 0 5px #ccc;
-		}
-		.list_top {
-			display: flex;
-			.avatar {
-				width: 30px;
-				height: 30px;
-				margin-right: 5px;
-				border-radius: 50%;
-				background-color: #f7f7f7;
-				background-repeat: no-repeat;
-				background-position: center center;
-				border: 1px solid #ddd;
-				background-size: cover;
-			}
-			.extra {
-				flex: 1;
-				text-align: left;
-				.name {
-					font-size: 16px;
-					line-height: 24px;
-					color: #080808;
-				}
-				.desc {
-					font-size: 12px;
-					line-height: 16px;
-					.time {
-						color: #aaa;
-						margin-right: 5px;
-					}
-					.tag {
-						color: #80bd01;
-					}
-				}
-			}
-		}
-		.icon_wrap {
+	.home {
+		.nav {
 			position: absolute;
-			display: flex;
-			right: 0;
 			top: 0;
-			.icon {
-				padding: 20px 5px;
-				flex: 1;
-				overflow: hidden;
-				.red {
-					color: red;
+			left: 0;
+			width: 100%;
+			z-index: 10;
+			border-bottom:  1px solid #ddd;
+			ul {
+				display: flex;
+				width: 100%;
+				.nav_item {
+					position: relative;
+					flex: 1;
+					height: 49px;
+					line-height: 49px;
+					text-align: center;
+					&:active {
+						background-color: #f5f5f5;
+					}
 				}
-				.green {
-					color: green;
-				}
-				.iconfont {
+				a {
 					display: block;
-					font-size: 34px;
-					transform: rotate(35deg);
+					font-size: 14px;
+					color: #a2a2a2;
+				}
+				.active {
+					a {
+						color: #222;
+					}
+					&:after {
+						content: '';
+						position: absolute;
+						bottom: 1px;
+						left: 0;
+						right: 0;
+						height: 3px;
+						background: #80bd01;
+					}
 				}
 			}
 		}
-		.tit {
-			padding: 10px 0;
-			text-align: left;
-			font-size: 16px;
-			line-height: 22px;
-			font-weight: bold;
-			color: #222;
-		}
-		.list_bot {
-			display: flex;
-			padding: 10px 0;
-			border-top: 1px solid #e1e1e1;
-			.item {
-				flex: 1;
-				padding: 0 10px;
-				border-right: 1px solid #eee;
-				line-height: 20px;
-				&:last-child {
-					border-right: none;
+		.list {
+			background-color: #eee;
+			overflow: hidden;
+			.list_item {
+				position: relative;
+				background-color: #fff;
+				padding: 15px;
+				padding-bottom: 0;
+				margin-bottom: 15px;
+				box-shadow: 0 0 5px #ccc;
+				&:active {
+					background-color: #f5f5f5;
 				}
-				.iconfont {
-					font-size: 16px;
+			}
+			.list_top {
+				display: flex;
+				.avatar {
+					width: 30px;
+					height: 30px;
 					margin-right: 5px;
-					color: #aaa;
+					border-radius: 50%;
+					background-color: #f7f7f7;
+					background-repeat: no-repeat;
+					background-position: center center;
+					border: 1px solid #ddd;
+					background-size: cover;
 				}
-				.text {
-					font-size: 12px;
+				.extra {
+					flex: 1;
+					text-align: left;
+					.name {
+						font-size: 16px;
+						line-height: 24px;
+						color: #080808;
+					}
+					.desc {
+						font-size: 12px;
+						line-height: 16px;
+						.time {
+							color: #aaa;
+							margin-right: 5px;
+						}
+						.tag {
+							color: #80bd01;
+						}
+					}
+				}
+			}
+			.icon_wrap {
+				position: absolute;
+				display: flex;
+				right: 0;
+				top: 0;
+				.icon {
+					padding: 20px 5px;
+					flex: 1;
+					overflow: hidden;
+					.red {
+						color: red;
+					}
+					.green {
+						color: green;
+					}
+					.iconfont {
+						display: block;
+						font-size: 34px;
+						transform: rotate(35deg);
+					}
+				}
+			}
+			.tit {
+				padding: 10px 0;
+				text-align: left;
+				font-size: 16px;
+				line-height: 22px;
+				font-weight: bold;
+				color: #222;
+			}
+			.list_bot {
+				display: flex;
+				padding: 10px 0;
+				border-top: 1px solid #e1e1e1;
+				.item {
+					flex: 1;
+					padding: 0 10px;
+					border-right: 1px solid #eee;
+					line-height: 20px;
+					&:last-child {
+						border-right: none;
+					}
+					.iconfont {
+						font-size: 16px;
+						margin-right: 5px;
+						color: #aaa;
+					}
+					.text {
+						font-size: 12px;
+					}
 				}
 			}
 		}
-	}
 
-	.more_btn {
-		display: block;
-		width: 30%;
-		height: 40px;
-		line-height: 40px;
-		text-align: center;
-		margin: 20px auto;
-		border-radius: 5px;
-		background-color: #252e39;
-		color: #fff;
-		border: none;
-		&:active {
-			opacity: 0.7;
+		.more_btn {
+			display: block;
+			width: 30%;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			margin: 20px auto;
+			border-radius: 5px;
+			background-color: #252e39;
+			color: #fff;
+			border: none;
+			&:active {
+				opacity: 0.7;
+			}
 		}
 	}
 </style>

@@ -59,6 +59,9 @@
 			.footer_item {
 				flex: 1;
 				text-align: center;
+				&:active {
+					background-color: #f5f5f5;
+				}
 			}
 			.active {
 				a {

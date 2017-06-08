@@ -4,8 +4,9 @@ import Router from 'vue-router'
 import Index from '../page/home/'
 import TopicVid from '../page/topic/vid/'
 import Username from '../page/user/'
-import Publish from '../page/topic/publish/'
+import TopicPublish from '../page/topic/publish/'
 import MyHome from '../page/my/home/'
+import MyMessage from '../page/my/messages/'
 
 Vue.use(Router)
 
@@ -21,7 +22,7 @@ export default new Router({
     },
     {
       path: '/topic/publish',
-      component: Publish
+      component: TopicPublish
     },
     {
       path: '/user/:username',
@@ -30,6 +31,10 @@ export default new Router({
     {
       path: '/my/home',
       component: MyHome
+    },
+    {
+      path: '/my/messages',
+      component: MyMessage
     }
   ]
 })

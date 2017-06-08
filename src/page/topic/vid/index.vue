@@ -9,7 +9,6 @@
 			<v-loading v-if="!id && exist"></v-loading>
 			<v-data-null v-if="!exist" msg="话题不存在"></v-data-null>
 			<ul v-if="id" class="topic-list">
-				<!-- author start -->
 				<div class="icon_wrap">
 					<div v-if="topic.good" class="icon">
 						<i class="iconfont icon-topic-good green"></i>
@@ -18,6 +17,8 @@
 						<i class="iconfont icon-topic-top red"></i>
 					</div>
 				</div>
+
+				<!-- author start -->
 				<li>
 					<div class="author_wrap">
 						<div class="avatar_wrap" :uid="topic.author_id">
