@@ -55,7 +55,7 @@
 					<div class="markdown-body" v-html="topic.content"></div>
 				</li>
 				<!-- theme end -->
-				<li v-if="replies && replies.length > 0" class="reply-count">
+				<li v-if="replies" class="reply-count">
 					共(<em>{{ replies.length }}</em>)条回复
 				</li>
 				<li v-for="(item, idx) in replies">
@@ -160,8 +160,8 @@
 			border-radius: 50%;
 			.avatar {
 				display: inline-block;
-				width: 100%;
-				height: 100%;
+				width: 30px;
+				height: 30px;
 				background-color: #eee;
 				background-repeat: no-repeat;
 				background-size: cover;
@@ -194,6 +194,9 @@
 		&>li {
 			padding: 10px 15px;
 			border-bottom: 1px solid #ddd;
+			&:last-child {
+				border: none;
+			}
 		}
 	}
 	.datas_header {

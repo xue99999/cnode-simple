@@ -1,4 +1,5 @@
 import './common/css/reset.css'
+import './common/css/common.css'
 import './iconfont/iconfont.css'
 import 'github-markdown-css'
 
@@ -21,7 +22,7 @@ Vue.config.productionTip = false
 
 let instance = axios.create({
   baseURL: 'https://cnodejs.org/api/v1/',
-  timeout: 1000
+  // timeout: 1000
 })
 
 Vue.prototype.$http = instance

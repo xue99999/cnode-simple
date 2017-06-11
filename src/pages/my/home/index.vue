@@ -3,7 +3,7 @@
 		<v-header title="个人中心"></v-header>
         <v-content>
 	        <!-- <v-loading></v-loading> -->
-        	<router-link to="/" style="display: block">
+        	<router-link to="/login" style="display: block">
         	<div class="user">
                 <div class="header_bg"></div>
                 <div class="avatar_wrap">

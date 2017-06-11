@@ -80,35 +80,67 @@
 					'job': '招聘'
 				},
 				searchKey: {
+					tab: 'all',
 					page: 1,
 					limit: 20,
-					tab: 'all',
 					mdrender: true
 				},
+				firstLoad: true,
 				loading: false,
 				complete: false
 			}
 		},
-		created() {
-			if (this.$route.query && this.$route.query.tab) {
+		mounted() {
+			if (this.$route.query.tab) {
 				this.searchKey.tab = this.$route.query.tab
 			} else {
 				this.searchKey.tab = 'all'
 			}
-			this.lists = []
-			this.getList()
+
+			let key = this.searchKey.tab
+			if (window.sessionStorage.getItem(key)) {
+				this.getStorage(key)
+			} else {
+				this.getList()
+			}
 		},
 		watch: {
+			// 切换页面
 			$route() {
-				if (this.$route.query && this.$route.query.tab) {
+				// 如果是当前页面切换分类的情况
+				if (this.$route.query.tab) {
 					this.searchKey.tab = this.$route.query.tab
 				} else {
 					this.searchKey.tab = 'all'
 				}
-				this.lists = []
-				this.searchKey.page = 1
-				this.getList()
+
+				let key = this.searchKey.tab
+				if (window.sessionStorage.getItem(key)) {
+					this.getStorage(key)
+				} else {
+					this.lists = []
+					this.searchKey.page = 1
+					this.getList()
+				}
 			}
+		},
+		beforeRouteEnter (to, from, next) {
+			console.log(from)
+			if (from.name != 'topic') {
+				window.sessionStorage.clear()
+			} else {
+				console.log('路由从topic页面进来')
+			}
+			next()
+		},
+		beforeRouteLeave(to, from, next) {
+			if (to.name == 'topic') {
+				this.setStorage()
+				let key = this.searchKey.tab
+				let con = document.getElementsByClassName('content')[0]
+				window.sessionStorage.setItem(key + 'Top', con.scrollTop)
+			}
+			next()
 		},
 		methods: {
 			seeing() {
@@ -132,6 +164,31 @@
 						this.searchKey.page++
 						this.loading = false
 					})
+			},
+			setStorage() {
+				let key = this.searchKey.tab
+				let data = {
+					page: this.searchKey.page,
+					lists: this.lists,
+				}
+				window.sessionStorage.setItem(key, JSON.stringify(data))
+				
+			},
+			getStorage(key) {
+				
+				let data = JSON.parse(window.sessionStorage.getItem(key))
+				this.lists = data.lists
+				this.searchKey.page = data.page
+
+				this.$nextTick(() => {
+					//必须nextTick DOM元素才能获取到
+					let con = document.getElementsByClassName('content')[0]
+
+					let top = window.sessionStorage.getItem(key + 'Top')
+
+					con.scrollTop = top
+				})
+				
 			},
 			transfromData(obj) {
 				let params = '?'
