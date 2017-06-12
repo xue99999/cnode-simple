@@ -14,8 +14,6 @@
 		    		<button class="btn">{{isLogin ? '正在登录中...' : '登录'}}</button>
 	    		</div>
 	    	</form>
-
-	    	<!-- <div class="common-toast common-toast-show">无效的accesstoken</div> -->
 	    </v-content>
 	</div>
 </template>
@@ -33,24 +31,23 @@
 		},
 		methods: {
 			submit() {
-				if (this.form.accesstoken.trim() == '') {
-					util.toast('请输入token')
-					return;
-				}
+				if (!this.form.accesstoken) return util.toast('请输入token')
+				
 				if (this.isLogin) return;
 				this.isLogin = true;
 				this.$http.post('accesstoken', this.form)
 					.then(d => {
-						console.log(d)
-						if (d.success) {
-							alert('登录成功')
+						if (d.data.success) {
+							util.toast('登录成功')
+							this.$router.go(-1)
 						} else {
-							alert(d.error_msg)
+							this.isLogin = false
+							util.toast(d.data.error_msg)
 						}
 					})
 					.catch(err => {
-						alert(err)
-						// console.error(err)
+						this.isLogin = false
+						util.toast('登录失败')
 					})
 			}
 		}

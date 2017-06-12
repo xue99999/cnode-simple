@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ul class="user_list">
+		<ul class="user_list" v-if="list.length">
 	        <li v-for="item in list">
 	        	<router-link :to="'/topic/' + item.id">
 		            <div class="author_wrap">
@@ -22,6 +22,7 @@
 	            </router-link>
 	        </li>
 	    </ul>
+	    <div class="list-null" v-else>没有记录</div>
 	</div>
 </template>
 
@@ -30,7 +31,7 @@
 		props: {
 			list: {
 				type: Array,
-				default: []
+				default:() => []
 			}
 		}
 	}
@@ -73,7 +74,9 @@
 	            .list_title {
 	            	display: inline-block;
 	            	padding: 10px 0;
-	                font-size: 16px;
+	                font-size: 15px;
+	                line-height: 1.5;
+	                color: #222;
 	            }
 	        }
 	        .extra_wrap {
@@ -81,5 +84,10 @@
 	            color: #888;
 	        }
 	    }
+	}
+	.list-null {
+		text-align: center;
+		line-height: 120px;
+		font-size: 14px;
 	}
 </style>

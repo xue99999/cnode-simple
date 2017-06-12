@@ -19,13 +19,15 @@ export default new Router({
       component: Index
     },
     {
+      path: '/topic/publish', 
+      //必须把这个写在topic/:vid前面
+      //否则他会按照规则进行匹配
+      component: TopicPublish
+    },
+    {
       name: 'topic',
       path: '/topic/:vid',
       component: TopicVid
-    },
-    {
-      path: '/topic/publish',
-      component: TopicPublish
     },
     {
       path: '/user/:username',
