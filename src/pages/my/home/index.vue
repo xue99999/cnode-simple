@@ -1,16 +1,29 @@
 <template>
 	<div class="my">
-		<v-header title="个人中心"></v-header>
+		<v-header title="个人中心">
+			<div v-if="user.id" slot="right" class="item" @click="loginout">
+				<i class="iconfont icon-signout"></i>
+			</div>
+		</v-header>
         <v-content>
 	        <!-- <v-loading></v-loading> -->
-        	<router-link to="/login" style="display: block">
-        	<div class="user">
-                <div class="header_bg"></div>
-                <div class="avatar_wrap">
-                    <span class="avatar" :style="{'background-image': 'url(' + '' + ')'}"></span>
-                </div>
-                <h2 class="nickname">你还未登录,请先登录!</h2>
-            </div>
+        	<router-link v-if="!user.loginname" to="/login" style="display: block">
+	        	<div class="user">
+	                <div class="header_bg"></div>
+	                <div class="avatar_wrap">
+	                    <span class="avatar"></span>
+	                </div>
+	                <h2 class="nickname">你还未登录,请先登录!</h2>
+	            </div>
+            </router-link>
+            <router-link v-if="user.loginname" :to="'/user/' + user.loginname" style="display: block">
+	        	<div class="user">
+	                <div class="header_bg"></div>
+	                <div class="avatar_wrap">
+	                    <span class="avatar" :style="{'background-image': 'url(' + user.avatar_url + ')'}"></span>
+	                </div>
+	                <h2 class="nickname">{{user.loginname}}</h2>
+	            </div>
             </router-link>
 			<ul class="my_nav">
 				<router-link to="/">
@@ -60,9 +73,46 @@
 	</div>
 </template>
 
+<script>
+	export default {
+		data() {
+			return {
+				user: {
+					id: '',
+					avatar_url: '',
+					loginname: '',
+				}
+			}
+		},
+		created() {
+			let user = window.localStorage.getItem('user')
+			if (user) {
+				this.user = Object.assign(this.user, JSON.parse(user))
+			}
+		},
+		methods: {
+			loginout() {
+				this.user = {}
+				window.localStorage.removeItem('user')
+			}
+		}
+	}
+</script>
+
 <style lang="less">
 	
 	.my {
+		.header {
+			.item {
+				&:active {
+					background-color: #eee;
+				}
+				.icon-signout {
+					font-size: 22px;
+				}
+			}	
+		}
+		
 		.content {
 			background-color: #f7f7f7;
 		}
@@ -94,7 +144,7 @@
 	        }
 	        .nickname {
 	            text-align: center;
-	            font-size: 14px;
+			    font-size: 16px;
 	            color: #80bd01;
 	            padding: 20px 0 30px 0;
 	        }

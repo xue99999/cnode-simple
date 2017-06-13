@@ -39,6 +39,7 @@
 					.then(d => {
 						if (d.data.success) {
 							util.toast('登录成功')
+							window.localStorage.setItem('user', JSON.stringify(d.data))
 							this.$router.go(-1)
 						} else {
 							this.isLogin = false

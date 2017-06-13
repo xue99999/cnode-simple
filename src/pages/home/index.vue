@@ -108,13 +108,18 @@
 			// 切换页面
 			$route() {
 				// 如果是当前页面切换分类的情况
+				let key = this.searchKey.tab
+				this.setStorage()
+				let con = document.getElementsByClassName('content')[0]
+				window.sessionStorage.setItem(key + 'Top', con.scrollTop)
+
 				if (this.$route.query.tab) {
 					this.searchKey.tab = this.$route.query.tab
 				} else {
 					this.searchKey.tab = 'all'
 				}
 
-				let key = this.searchKey.tab
+				key = this.searchKey.tab
 				if (window.sessionStorage.getItem(key)) {
 					this.getStorage(key)
 				} else {
@@ -122,6 +127,7 @@
 					this.searchKey.page = 1
 					this.getList()
 				}
+
 			}
 		},
 		beforeRouteEnter (to, from, next) {
@@ -165,7 +171,7 @@
 			setStorage() {
 				let key = this.searchKey.tab
 				let data = {
-					page: this.searchKey.page,
+					page: this.searchKey.page, //当前是第几页
 					lists: this.lists,
 				}
 				window.sessionStorage.setItem(key, JSON.stringify(data))
