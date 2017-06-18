@@ -20,6 +20,7 @@
 
 <script>
 	import * as util from 'util/toast.js'
+	
 	export default {
 		data() {
 			return {
@@ -40,6 +41,7 @@
 						if (d.data.success) {
 							util.toast('登录成功')
 							window.localStorage.setItem('user', JSON.stringify(d.data))
+							window.localStorage.setItem('accesstoken', this.form.accesstoken)
 							this.$router.go(-1)
 						} else {
 							this.isLogin = false

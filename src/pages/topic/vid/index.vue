@@ -8,99 +8,152 @@
 		<v-content style="bottom: 0">
 			<v-loading v-if="!id && exist"></v-loading>
 			<v-data-null v-if="!exist" msg="话题不存在"></v-data-null>
-			<ul v-if="id" class="topic-list">
-				<div class="icon_wrap">
-					<div v-if="topic.good" class="icon">
-						<i class="iconfont icon-topic-good green"></i>
+			<div v-if="id">
+				<ul class="topic-list">
+					<div class="icon_wrap">
+						<div v-if="topic.good" class="icon">
+							<i class="iconfont icon-topic-good green"></i>
+						</div>
+						<div v-if="topic.top" class="icon">
+							<i class="iconfont icon-topic-top red"></i>
+						</div>
 					</div>
-					<div v-if="topic.top" class="icon">
-						<i class="iconfont icon-topic-top red"></i>
-					</div>
-				</div>
 
-				<!-- author start -->
-				<li>
-					<div class="author_wrap">
-						<div class="avatar_wrap" :uid="topic.author_id">
-							<router-link :to="'/user/' + author.loginname">
-								<span class="avatar" :style="{'background-image': 'url(' + author.avatar_url + ')'}"></span>
-							</router-link>
+					<!-- author start -->
+					<li>
+						<div class="author_wrap">
+							<div class="avatar_wrap" :uid="topic.author_id">
+								<router-link :to="'/user/' + author.loginname">
+									<span class="avatar" :style="{'background-image': 'url(' + author.avatar_url + ')'}"></span>
+								</router-link>
+							</div>
+							<div class="info_wrap">
+								<h2>
+									<router-link :to="'/user/' + author.loginname" class="nickname">{{author.loginname}}</router-link>
+								</h2>
+								<span class="time">{{topic.create_at | formatDate}}</span>
+							</div>
+							<div class="extra_wrap">
+								<span>#楼主</span>
+							</div>
 						</div>
-						<div class="info_wrap">
-							<h2>
-								<router-link :to="'/user/' + author.loginname" class="nickname">{{author.loginname}}</router-link>
-							</h2>
-							<span class="time">{{topic.create_at | formatDate}}</span>
+					</li>
+					<!-- author end -->
+					<!-- theme start -->
+					<li>
+						<div class="datas_header">
+							<h3 class="tit">{{topic.title}}</h3>
+							<div class="nums_wrap">
+								<span>
+									<i class="iconfont icon-click"></i>
+									<em>{{topic.visit_count}}</em>
+								</span>
+								<span>
+									<i class="iconfont icon-comment"></i>
+									<em>{{topic.reply_count}}</em>
+								</span>
+							</div>
 						</div>
-						<div class="extra_wrap">
-							<span>#楼主</span>
+						<!-- markdown 语法 -->
+						<div class="markdown-body" v-html="topic.content"></div>
+					</li>
+					<!-- theme end -->
+					<li v-if="replies" class="reply-count">
+						共(<em>{{ replies.length }}</em>)条回复
+					</li>
+					<li v-for="(item, idx) in replies">
+						<div class="author_wrap">
+							<div class="avatar_wrap">
+								<router-link :to="'/user/' + item.author.loginname">
+									<span class="avatar" :style="{'background-image': 'url(' + item.author.avatar_url + ')'}"></span>
+								</router-link>
+							</div>
+							<div class="info_wrap">
+								<h2>
+									<router-link :to="'/user/' + item.author.loginname" class="nickname">{{item.author.loginname}}</router-link>
+								</h2>
+								<span class="time">{{item.create_at | formatDate}}</span>
+								<!-- 评论 -->
+				                <div class="markdown-body comment" v-html="item.content"></div>
+							</div>
+							<div class="extra_wrap">
+								<span>#{{idx + 1}}</span>
+							</div>
 						</div>
-					</div>
-				</li>
-				<!-- author end -->
-				<!-- theme start -->
-				<li>
-					<div class="datas_header">
-						<h3 class="tit">{{topic.title}}</h3>
-						<div class="nums_wrap">
-							<span>
-								<i class="iconfont icon-click"></i>{{topic.visit_count}}
+						<div class="bottom_wrap">
+							<span class="comment_zan" @click="fabulousItem(item.id, item.ups)" :class="{actived: isFabulous(item.ups)}">
+								<i v-if="user.loginname != item.author.loginname" class="iconfont icon-comment-fabulous"></i>
+								<em v-if="item.ups.length">{{item.ups.length}}</em>
 							</span>
-							<span>
-								<i class="iconfont icon-comment"></i>{{topic.reply_count}}
+							<span class="comment_reply" @click="commentShow(item)">
+								<i class="iconfont icon-comment-topic"></i>
 							</span>
 						</div>
-					</div>
-					<!-- markdown 语法 -->
-					<div class="markdown-body" v-html="topic.content"></div>
-				</li>
-				<!-- theme end -->
-				<li v-if="replies" class="reply-count">
-					共(<em>{{ replies.length }}</em>)条回复
-				</li>
-				<li v-for="(item, idx) in replies">
-					<div class="author_wrap">
-						<div class="avatar_wrap">
-							<router-link :to="'/user/' + item.author.loginname">
-								<span class="avatar" :style="{'background-image': 'url(' + item.author.avatar_url + ')'}"></span>
-							</router-link>
-						</div>
-						<div class="info_wrap">
-							<h2>
-								<router-link :to="'/user/' + item.author.loginname" class="nickname">{{item.author.loginname}}</router-link>
-							</h2>
-							<span class="time">{{item.create_at | formatDate}}</span>
-							<!-- 评论 -->
-			                <div class="markdown-body comment" v-html="item.content"></div>
-						</div>
-						<div class="extra_wrap">
-							<span>#{{idx + 1}}</span>
-						</div>
-					</div>
-				</li>
-			</ul>
-			
+
+						<!-- <reply-box v-if="item.showComment" style="padding: 10px 0" :loginname="item.author.loginname" :reply_id="item.id" @success="getData"></reply-box> -->
+					</li>
+				</ul>
+				<div v-if="user.id">
+					<reply-box @success="getData"></reply-box>
+				</div>
+				<div class="tip-login" v-if="!user.id">
+					你还未登录,请先
+					<router-link to="/login">登录</router-link>
+				</div>
+			</div>
 		</v-content>
 	</div>
 </template>
 
 <script>
+	import replyBox from './reply-box'
 	export default {
 		data() {
 			return {
+				user: '',
 				exist: true,
 				id: '',
 				topic: {},
 				author: {},
-				replies: []
+				replies: [],
+				accesstoken: ''
 			}
 		},
-		created() {
-			this.getData()	
+		mounted() {
+			let { vid } = this.$route.params
+			if (window.sessionStorage.getItem(vid)) {
+				this.topic = JSON.parse(window.sessionStorage.getItem(vid))
+				let { topic } = this
+				this.author = topic.author
+				this.replies = topic.replies
+				this.id = topic.id
+				this.$nextTick(() => {
+					let con = document.getElementsByClassName('content')[0]
+					let top = window.sessionStorage.getItem(vid + 'Top')
+					con.scrollTop = top
+				})
+			} else {
+				this.getData()
+			}
+			if (window.localStorage.getItem('user')) {
+				this.user = JSON.parse(window.localStorage.getItem('user'))
+			}
+			if (window.localStorage.getItem('accesstoken')) {
+				this.accesstoken = window.localStorage.getItem('accesstoken')
+			}
+		},
+		beforeRouteLeave(to, from, next) {
+			let { vid } = this.$route.params
+			let con = document.getElementsByClassName('content')[0]
+			if (con.scrollTop) {
+				window.sessionStorage.setItem(vid, JSON.stringify(this.topic))
+				window.sessionStorage.setItem(vid + 'Top', con.scrollTop)
+			}
+			next()
 		},
 		methods: {
 			getData() {
-				let vid = this.$route.params.vid
+				let { vid } = this.$route.params
 				this.$http.get('topic/' + vid)
 					.then(d => {
 						if (d.data.data && d.data.data.id) {
@@ -108,6 +161,11 @@
 							this.id = d.data.data.id
 							this.author = d.data.data.author
 							this.replies = d.data.data.replies
+
+							//给每一项 加一个属性(判断是否显示回复框)
+							this.replies.forEach(item => {
+								this.$set(item, 'showComment', 'false');
+							})
 						} else {
 							this.exist = false;
 						}
@@ -115,8 +173,32 @@
 					.catch(err => {
 						console.error(err)
 					})
+			},
+			isFabulous(ups) {
+				return ups.indexOf(this.user.id) > -1
+			},
+			fabulousItem(id, ups) {
+				if (!this.accesstoken) return this.$router.push('/login')
+
+				let index = ups.indexOf(this.user.id)
+
+				if (index > -1) {
+					ups.splice(index, 1)
+				} else {
+					ups.push(this.user.id)
+				}
+				this.$http.post(`reply/${id}/ups`, {accesstoken: this.accesstoken})
+			},
+			commentShow(item) {
+				if (!this.accesstoken) return this.$router.push('/login')
+				let { showComment } = item
+				this.replies.forEach(ele => {
+					ele.showComment = false
+				})
+				item.showComment = true
 			}
-		}
+		},
+		components: { replyBox }
 	}
 </script>
 
@@ -171,6 +253,7 @@
 		.info_wrap {
 			flex: 1;
 			text-align: left;
+			word-break: break-all;
 			.nickname {
 				color: #80bd01;
 				font-weight: 500;
@@ -210,19 +293,21 @@
 			color: #333;
 		}
 		.nums_wrap {
-			text-align: center;
-			font-size: 0;
+			display: flex;
+			justify-content: center;
 			span {
-				font-size: 14px;
-				color: #888;
+				display: flex;
+				align-items: center;
+				color: #666;
 				margin-right: 8px;
 				&:last-child {
 					margin-right: 0;
 				}
 			}
-			.iconfont {
-				font-size: 14px;
-				margin-right: 3px;
+			em {
+				font-size: 13px;
+				padding-left: 3px;
+				font-style: normal;
 			}
 		}
 	}
@@ -230,12 +315,33 @@
 		text-align: left;
 		border-left: 4px solid #80bd01;
 		em {
-			color: red;
+			color: #80bd01;
 			font-style: normal;
 		}
 
 	}
 	.markdown-body {
 		padding: 10px 0;
+	}
+	.tip-login {
+		text-align: center;
+		padding: 100px;
+		font-size: 14px;
+		a {
+			color: #80bd01;
+		}
+	}
+	.bottom_wrap {
+		text-align: right;
+		.comment_zan, .comment_reply {
+			padding: 5px 10px;
+			&.actived {
+				color: #80bd01;
+			}
+			em {
+				font-style: normal;
+				font-size: 13px;
+			}
+		}
 	}
 </style>

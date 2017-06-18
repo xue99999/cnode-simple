@@ -6,7 +6,6 @@
 			</div>
 		</v-header>
         <v-content>
-	        <!-- <v-loading></v-loading> -->
         	<router-link v-if="!user.loginname" to="/login" style="display: block">
 	        	<div class="user">
 	                <div class="header_bg"></div>
@@ -26,7 +25,7 @@
 	            </div>
             </router-link>
 			<ul class="my_nav">
-				<router-link to="/">
+				<router-link to="/topic/publish">
 				<li class="nav_li border">
 					<div class="nav_li_hd">
 						<i class="iconfont icon-edit"></i>
@@ -39,7 +38,7 @@
 					</div>
 				</li>
 				</router-link>
-				<router-link to="/">
+				<router-link to="/my/messages">
 				<li class="nav_li">
 					<div class="nav_li_hd">
 						<i class="iconfont icon-msg" style="color: #e41e1e"></i>
@@ -94,6 +93,7 @@
 			loginout() {
 				this.user = {}
 				window.localStorage.removeItem('user')
+				window.localStorage.removeItem('accesstoken')
 			}
 		}
 	}

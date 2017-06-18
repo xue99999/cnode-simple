@@ -1,14 +1,14 @@
 <template>
 	<div class="publish_wrap">
 		<v-header title="发表">
-      <div slot="right" class="item">
+      <div slot="right" class="item" @click="submit">
 		    <i class="iconfont icon-edit"></i>
       </div>
     </v-header>
     <v-content>
         <form class="form" @submit.prevent="submit">
           <div class="title">
-            <input type="text" placeholder="标题..." v-model="form.title">
+            <input type="text" placeholder="标题十个字以上..." v-model="form.title">
           </div>
           <div class="select">
             <select v-model="form.tab">
@@ -16,6 +16,7 @@
               <option value="share">分享</option>
               <option value="ask">问答</option>
               <option value="job">招聘</option>
+              <option value="dev">测试</option>
             </select>
           </div>
           <div class="con">
@@ -28,14 +29,52 @@
 </template>
 
 <script>
+  import * as util from 'util/toast.js'
   export default {
     data() {
       return {
         form: {
+          accesstoken: '',
+          topic_id: '',
           title: '',
           tab: '',
           content: ''
         }
+      }
+    },
+    methods: {
+      submit() {
+        if (window.localStorage.getItem('accesstoken')) {
+          this.form.accesstoken = window.localStorage.getItem('accesstoken')
+        }
+
+        if (!this.form.accesstoken) return this.$router.push({ path: '/login' })
+
+        let { form } = this
+
+        if (!form.title) {
+          return util.toast('标题不能为空')
+        } else if (!form.tab) {
+          return util.toast('选项不能为空')
+        } else if (!form.content) {
+          return util.toast('内容不能为空')
+        }
+
+        this.$http.post('topics', this.form)
+          .then(d => {
+            console.log(d.data)
+            if (d.data.success) {
+              console.log('发布成功')
+              let vid = d.data.topic_id
+              this.$router.push({ path: `/topic/${vid}` })
+            } else {
+              console.log('发布失败')
+              util.toast(error_msg)
+            }
+          })
+          .catch(err => {
+            util.toast('发布失败')
+          })
       }
     }
   }
