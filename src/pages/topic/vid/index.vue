@@ -85,12 +85,12 @@
 								<i v-if="user.loginname != item.author.loginname" class="iconfont icon-comment-fabulous"></i>
 								<em v-if="item.ups.length">{{item.ups.length}}</em>
 							</span>
-							<span class="comment_reply" @click="commentShow(item)">
+							<span class="comment_reply" @click="commentShow(item.id)">
 								<i class="iconfont icon-comment-topic"></i>
 							</span>
 						</div>
 
-						<!-- <reply-box v-if="item.showComment" style="padding: 10px 0" :loginname="item.author.loginname" :reply_id="item.id" @success="getData"></reply-box> -->
+						<reply-box v-if="item.id == curReplyId" style="padding: 10px 0" :loginname="item.author.loginname" :reply_id="item.id" @success="getData"></reply-box>
 					</li>
 				</ul>
 				<div v-if="user.id">
@@ -116,7 +116,8 @@
 				topic: {},
 				author: {},
 				replies: [],
-				accesstoken: ''
+				accesstoken: '',
+				curReplyId: ''
 			}
 		},
 		mounted() {
@@ -161,11 +162,10 @@
 							this.id = d.data.data.id
 							this.author = d.data.data.author
 							this.replies = d.data.data.replies
-
-							//给每一项 加一个属性(判断是否显示回复框)
-							this.replies.forEach(item => {
-								this.$set(item, 'showComment', 'false');
-							})
+							//评论成功,关掉reply-box组件
+							if (this.curReplyId) {
+								this.curReplyId = ''
+							}
 						} else {
 							this.exist = false;
 						}
@@ -189,13 +189,9 @@
 				}
 				this.$http.post(`reply/${id}/ups`, {accesstoken: this.accesstoken})
 			},
-			commentShow(item) {
+			commentShow(id) {
 				if (!this.accesstoken) return this.$router.push('/login')
-				let { showComment } = item
-				this.replies.forEach(ele => {
-					ele.showComment = false
-				})
-				item.showComment = true
+				this.curReplyId = id
 			}
 		},
 		components: { replyBox }

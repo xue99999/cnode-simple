@@ -30,7 +30,6 @@
 						<div class="extra">
 							<h2 class="name">{{item.author.loginname}}</h2>
 							<div class="desc">
-								<!-- <time class="time">1天前</time><span class="tag">#分享#</span> -->
 								<time class="time">{{item.create_at | formatDate}}</time><span class="tag">#{{tabs[item.tab]}}#</span>
 							</div>
 						</div>
