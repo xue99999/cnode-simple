@@ -3,26 +3,28 @@
 		<v-header title="我的消息">
 		</v-header>
 		<v-content>
-			<div class="list">
-				<div class="item">
+			<div v-if="!!list && list.length" class="list">
+				<div v-for="item in list" class="item">
 					<div class="avatar_wrap">
-						<!-- <router-link to="/user/123"> -->
-							<img src="https://avatars0.githubusercontent.com/u/7077490?v=3&s=120" alt="">
-						<!-- </router-link> -->
+						<router-link :to="'/user/' + item.author.loginname">
+							<img :src="item.author.avatar_url" alt="">
+						</router-link>
 					</div>
 					<div class="content_wrap">
 						<div class="top">
-							<span class="nickname">shiyingang</span>
-							<time class="time">13小时</time>
+                            <router-link :to="'/user/' + item.author.loginname">
+    							<span class="nickname">{{item.author.loginname}}</span>
+                            </router-link>
+							<time class="time">{{item.create_at | formatDate}}</time>
 						</div>
 						<div class="mid">
 							<span>回复了你的话题</span>
-							<!-- <router-link to="/"> -->
-								<span class="topic_title">测试完了很快删除啊</span>
-							<!-- </router-link> -->
+							<router-link :to="'/topic/' + item.topic.id">
+								<span class="topic_title">{{item.topic.title}}</span>
+							</router-link>
 						</div>
 						<div class="bot">
-							<div class="markdown-body">hahha</div>
+							<div class="markdown-body" v-html="item.reply.content"></div>
 						</div>
 					</div>
 				</div>
@@ -42,6 +44,7 @@
 			display: flex;
 			padding: 10px 15px;
 			border-bottom: 1px solid #ddd;
+            word-break: break-all;
 		}
 		.avatar_wrap {
 			width: 40px;
@@ -78,7 +81,7 @@
 				margin-top: 10px;
 				padding: 10px;
 				border-radius: 5px;
-				background-color: #ddd;
+				background-color: #f5f5f5;
 			}
 		}
 	}
@@ -88,8 +91,27 @@
 	export default {
 		data() {
 			return {
-				list: []
+				list: [],
+                accesstoken: ''
 			}
-		}
+		},
+        mounted() {
+            this.getData()
+        },
+        methods: {
+            getData() {
+                if (window.localStorage.getItem('accesstoken')) {
+                    this.accesstoken = window.localStorage.getItem('accesstoken')
+                }
+
+                this.$http.get('messages?accesstoken=' + this.accesstoken)
+                    .then(d => {
+                        this.list = d.data.data.hasnot_read_messages
+                    })
+                    .catch(err => {
+                        console.error(err)
+                    })
+            }
+        }
 	}
 </script>
