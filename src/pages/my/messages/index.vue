@@ -29,7 +29,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- <v-data-null v-if="!list.length"></v-data-null> -->
+			<v-data-null v-if="!list.length"></v-data-null>
 		</v-content>
 		<v-footer></v-footer>
 	</div>
@@ -79,7 +79,7 @@
 			}
 			.bot {
 				margin-top: 10px;
-				padding: 10px;
+				padding: 0 5px;
 				border-radius: 5px;
 				background-color: #f5f5f5;
 			}
@@ -91,8 +91,7 @@
 	export default {
 		data() {
 			return {
-				list: [],
-                accesstoken: ''
+				list: []
 			}
 		},
         mounted() {
@@ -100,13 +99,16 @@
         },
         methods: {
             getData() {
-                if (window.localStorage.getItem('accesstoken')) {
-                    this.accesstoken = window.localStorage.getItem('accesstoken')
-                }
-
-                this.$http.get('messages?accesstoken=' + this.accesstoken)
+            	let accesstoken = window.localStorage.getItem('accesstoken')
+                if (!accesstoken) return
+                
+                this.$http.get('messages?accesstoken=' + accesstoken)
                     .then(d => {
-                        this.list = d.data.data.hasnot_read_messages
+                        let arr1 = d.data.data.hasnot_read_messages
+                        let arr2 = d.data.data.has_read_messages
+                        this.list = [...arr1, ...arr2]
+                        //数据成功之后, 标记为已读
+                        this.$http.post('message/mark_all', {accesstoken})
                     })
                     .catch(err => {
                         console.error(err)

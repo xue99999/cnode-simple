@@ -6,19 +6,9 @@ import 'github-markdown-css'
 import Vue from 'vue'
 import axios from 'axios'
 import App from './App'
-import VueLazyload from 'vue-lazyload'
 import router from './router'
 import components from './components/'
 import * as filters from './filters/'
-
-Vue.use(VueLazyload)
-
-Vue.use(VueLazyload, {
-  preLoad: 1.3,
-  error: 'dist/error.png',
-  loading: 'http://cdn.uehtml.com/201402/1392662591495_1140x0.gif',
-  attempt: 1
-})
 
 Object.keys(components).forEach(key => {
   var name = key.replace(/(\w)/, (v) => v.toUpperCase()) // 首字母大写

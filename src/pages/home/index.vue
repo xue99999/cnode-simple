@@ -24,7 +24,7 @@
 				<li class="list_item" v-for="item in lists" :data-id="item.id">
 					<router-link :to="'/topic/' + item.id">
 					<div class="list_top">
-						<div class="avatar" v-lazy:background-image="item.author.avatar_url">
+						<div class="avatar" :style="{'background-image': 'url(' + item.author.avatar_url + ')'}">
 						</div>
 
 						<div class="extra">

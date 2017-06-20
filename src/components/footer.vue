@@ -6,6 +6,9 @@
 					<router-link :to="list.path">
 						<i class="iconfont" :class="list.icon"></i>
 						<em>{{list.title}}</em>
+						<div class="count" v-if="list.path == '/my/messages' && !!count">
+							{{count}}
+						</div>
 					</router-link>
 				</li>
 			</ul>
@@ -17,6 +20,7 @@
 	export default {
 		data() {
 			return {
+				count: '',
 				lists: [
 					{
 						path: '/',
@@ -40,6 +44,27 @@
 					}
 				]
 			}
+		},
+		mounted() {
+			this.getCount()
+		},
+		methods: {
+			getCount() {
+				let accesstoken = window.localStorage.getItem('accesstoken')
+				if (!accesstoken) return
+
+				this.$http.get('message/count?accesstoken=' + accesstoken)
+					.then(d => {
+						if (d.data.success) {
+							this.count = d.data.data
+						} else {
+							this.count = 0
+						}
+					})
+					.catch(err => {
+						console.error(err)
+					})
+			}
 		}
 	}
 </script>
@@ -57,6 +82,7 @@
 			width: 100%;
 			padding: 5px 0;
 			.footer_item {
+				position: relative;
 				flex: 1;
 				text-align: center;
 				&:active {
@@ -82,7 +108,16 @@
 				font-size: 13px;
 				line-height: 16px;
 			}
-
+			.count {
+				position: absolute;
+				top: 0;
+				left: 50%;
+				padding: 2px 5px;
+				border-radius: 15px;
+				font-size: 12px;
+				background-color: red;
+				color: #fff;
+			}
 		}
 	}
 </style>

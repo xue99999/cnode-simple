@@ -122,8 +122,9 @@
 		},
 		mounted() {
 			let { vid } = this.$route.params
-			if (window.sessionStorage.getItem(vid)) {
-				this.topic = JSON.parse(window.sessionStorage.getItem(vid))
+			let session = window.sessionStorage.getItem(vid)
+			if (session) {
+				this.topic = JSON.parse(session)
 				let { topic } = this
 				this.author = topic.author
 				this.replies = topic.replies
@@ -136,10 +137,9 @@
 			} else {
 				this.getData()
 			}
-			if (window.localStorage.getItem('user')) {
-				this.user = JSON.parse(window.localStorage.getItem('user'))
-			}
-			if (window.localStorage.getItem('accesstoken')) {
+			let user = window.localStorage.getItem('user')
+			if (user) {
+				this.user = JSON.parse(user)
 				this.accesstoken = window.localStorage.getItem('accesstoken')
 			}
 		},
