@@ -102,6 +102,7 @@
 				</div>
 			</div>
 		</v-content>
+	    <!-- <v-back></v-back> -->
 	</div>
 </template>
 
@@ -228,8 +229,6 @@
 	}
 	.author_wrap {
 		display: flex;
-	    // align-items: center;
-		// height: 40px;
 		.avatar_wrap {
 			width: 30px;
 			height: 30px;
@@ -250,6 +249,7 @@
 			flex: 1;
 			text-align: left;
 			word-break: break-all;
+			overflow: hidden;
 			.nickname {
 				color: #80bd01;
 				font-weight: 500;
@@ -268,7 +268,7 @@
 		}
 	}
 	.topic-list {
-		overflow-x: hidden;
+		overflow: hidden;
 		text-align: left;
 		&>li {
 			padding: 10px 15px;

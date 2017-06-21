@@ -53,7 +53,7 @@
 				</router-link>
 			</ul>
 			<ul class="my_nav">
-				<router-link to="/">
+				<router-link to="/about">
 				<li class="nav_li">
 					<div class="nav_li_hd">
 						<i class="iconfont icon-about" style="color: #aaa"></i>

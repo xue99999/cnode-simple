@@ -8,6 +8,7 @@ import TopicPublish from '../pages/topic/publish/'
 import MyHome from '../pages/my/home/'
 import MyMessage from '../pages/my/messages/'
 import Login from '../pages/login/'
+import About from '../pages/about/'
 
 Vue.use(Router)
 
@@ -44,6 +45,10 @@ export default new Router({
     {
       path: '/login',
       component: Login
+    },
+    {
+      path: '/about',
+      component: About
     }
   ]
 })

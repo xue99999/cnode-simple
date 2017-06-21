@@ -63,6 +63,7 @@
 			<v-loading :loading="loading" :complete="complete" @seeing="seeing"></v-loading>
 		</v-content>
 		<v-footer></v-footer>
+		<!-- <v-back></v-back> -->
 	</div>
 </template>
 
@@ -329,6 +330,9 @@
 				padding: 10px 0;
 				border-top: 1px solid #e1e1e1;
 				.item {
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					flex: 1;
 					padding: 0 10px;
 					border-right: 1px solid #eee;
@@ -338,7 +342,7 @@
 					}
 					.iconfont {
 						font-size: 16px;
-						margin-right: 5px;
+						margin-right: 3px;
 						color: #aaa;
 					}
 					.text {
