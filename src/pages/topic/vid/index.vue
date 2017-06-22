@@ -102,7 +102,7 @@
 				</div>
 			</div>
 		</v-content>
-	    <!-- <v-back></v-back> -->
+	    <v-back></v-back>
 	</div>
 </template>
 

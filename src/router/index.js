@@ -39,6 +39,7 @@ export default new Router({
       component: MyHome
     },
     {
+      meta: { auth: false },
       path: '/my/messages',
       component: MyMessage
     },
@@ -49,6 +50,10 @@ export default new Router({
     {
       path: '/about',
       component: About
+    },
+    {
+      path: '*',
+      component: Login
     }
   ]
 })

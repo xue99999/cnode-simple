@@ -21,11 +21,22 @@ Object.keys(filters).forEach(k => Vue.filter(k, filters[k]))
 Vue.config.productionTip = false
 
 let instance = axios.create({
-  baseURL: 'https://cnodejs.org/api/v1/',
-  // timeout: 1000
+  baseURL: 'https://cnodejs.org/api/v1/'
 })
 
 Vue.prototype.$http = instance
+
+//判断是否需要登录 路由表中meta: { auth: false}
+router.beforeEach(({ meta , path}, from, next) => {
+  let { auth = true } = meta
+  let isLogin = window.localStorage.getItem('accesstoken')
+
+  if (!auth && !isLogin && path != '/login') {
+  	let to = { path: '/login' }
+  	return next(to)
+  }
+  next()
+})
 
 
 /* eslint-disable no-new */

@@ -63,7 +63,7 @@
 			<v-loading :loading="loading" :complete="complete" @seeing="seeing"></v-loading>
 		</v-content>
 		<v-footer></v-footer>
-		<!-- <v-back></v-back> -->
+		<v-back></v-back>
 	</div>
 </template>
 
