@@ -321,7 +321,7 @@
 	}
 	.tip-login {
 		text-align: center;
-		padding: 100px;
+		padding: 100px 50px;
 		font-size: 14px;
 		a {
 			color: #80bd01;
