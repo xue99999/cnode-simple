@@ -50,6 +50,7 @@
 					})
 					.catch(err => {
 						this.isLogin = false
+						console.error(err)
 						util.toast('登录失败')
 					})
 			}
